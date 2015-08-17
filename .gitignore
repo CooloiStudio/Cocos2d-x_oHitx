@@ -69,6 +69,7 @@ out/
 .project
 .cproject
 proj.*/
+cocos2d
 
 # backup files
 *.bak
