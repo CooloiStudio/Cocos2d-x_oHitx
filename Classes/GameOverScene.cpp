@@ -7,7 +7,7 @@
 //
 
 #include "GameOverScene.h"
-#include "Cooloi_RandTransition.h"
+#include "Cooloi_Game.h"
 
 #include "json/rapidjson.h"
 #include "json/document.h"
@@ -15,8 +15,6 @@
 #include "json/stringbuffer.h"
 
 #include "HelloWorldScene.h"
-
-#include "Cooloi_to_string.h"
 
 GameOver::GameOver():
 label_score_(nullptr)
@@ -114,7 +112,7 @@ bool GameOver::init()
 void GameOver::menuCloseCallback(Ref* pSender)
 {
     auto scene = HelloWorld::createScene();
-    Cooloi::RandTransition::RandTransitionFn(scene);
+    Cooloi::Game::RandTransitionFn(scene);
 }
 
 void GameOver::DataUpdate()

@@ -1,6 +1,6 @@
 #include "AppDelegate.h"
 #include "HelloWorldScene.h"
-#include "Cooloi_RandTransition.h"
+#include "Cooloi_Game.h"
 
 USING_NS_CC;
 
@@ -28,9 +28,13 @@ bool AppDelegate::applicationDidFinishLaunching() {
     auto director = Director::getInstance();
     auto glview = director->getOpenGLView();
     if(!glview) {
-        glview = GLViewImpl::create("My Game");
+        glview = GLViewImpl::createWithRect("oHitx", Rect(0, 0, 1080, 1920));
         director->setOpenGLView(glview);
     }
+    
+    director->getOpenGLView()->setDesignResolutionSize(1080,
+                                                       1920,
+                                                       ResolutionPolicy::NO_BORDER);
 
     // turn on display FPS
     director->setDisplayStats(false);
@@ -41,7 +45,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     // create a scene. it's an autorelease object
     auto scene = HelloWorld::createScene();
     
-    Cooloi::RandTransition::RandTransitionFn(scene);
+    Cooloi::Game::RandTransitionFn(scene);
     
     return true;
 }

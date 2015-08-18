@@ -1,5 +1,5 @@
 #include "HelloWorldScene.h"
-#include "Cooloi_RandTransition.h"
+#include "Cooloi_Game.h"
 #include <math.h>
 
 #include "json/rapidjson.h"
@@ -9,8 +9,6 @@
 
 #include "GameOverScene.h"
 #include "iostream"
-
-#include "Cooloi_to_string.h"
 
 using namespace cocos2d::ui;
 
@@ -91,11 +89,11 @@ bool HelloWorld::init()
 #pragma mark -add player sprite
     // add "HelloWorld" splash screen"
     auto player1 = Sprite::create("xo0002.png");
+    Cooloi::Game::SetScale(player1);
     
     // position the sprite on the center of the screen
     player1->setPosition(Vec2(origin.x + player1->getContentSize().width / 2,
                               origin.y + visible_size.height / 2));
-    
     player1->setTag(233);
     
     // add the sprite as a child to this layer
@@ -122,17 +120,23 @@ bool HelloWorld::init()
 
 void HelloWorld::AddTarget()
 {
-    auto *target = Sprite::create("xo0001.png");
     auto window_size = Director::getInstance()->getVisibleSize();
+    auto origin = Director::getInstance()->getVisibleOrigin();
     
-    auto min_y = target->getContentSize().height / 2;
-    auto max_y = window_size.height - target->getContentSize().height / 2;
+    auto *target = Sprite::create("xo0001.png");
+    Cooloi::Game::SetScale(target);
+    
+    auto min_y = origin.y + target->getContentSize().height / 2;
+    auto max_y = origin.y + window_size.height - target->getContentSize().height / 2;
     
     auto range_y = max_y - min_y;
     auto actual_y = (rand() % (int)range_y) + min_y;
     
-    target->setPosition(Vec2(window_size.width + (target->getContentSize().width / 2),
+    target->setPosition(Vec2(window_size.width
+                             + (target->getContentSize().width / 2)
+                             + origin.x,
                              actual_y));
+    
     this->addChild(target);
     target->setTag(1);
     targets_.pushBack(target);
@@ -298,7 +302,7 @@ void HelloWorld::onTouchEnded(cocos2d::Touch *touch,
     auto off_y = location.y - bullet->getPosition().y;
     
     if (0 >= off_x) return;
-    
+    Cooloi::Game::SetScale(bullet);
     this->addChild(bullet);
     bullets_.pushBack(bullet);
     
@@ -393,6 +397,6 @@ void HelloWorld::DataUpdateMiss()
         
         scene->DataUpdate();
         
-        Cooloi::RandTransition::RandTransitionFn(scene);
+        Cooloi::Game::RandTransitionFn(scene);
     }
 }
