@@ -1,5 +1,6 @@
 #include "AppDelegate.h"
 #include "HelloWorldScene.h"
+#include "Cooloi_RandTransition.h"
 
 USING_NS_CC;
 
@@ -40,43 +41,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
     // create a scene. it's an autorelease object
     auto scene = HelloWorld::createScene();
     
-    TransitionScene *ts;
+    Cooloi::RandTransition::RandTransitionFn(scene);
     
-    switch (rand() % 5)
-    {
-        case 0:
-        {
-            ts = TransitionShrinkGrow::create(1, scene);
-            break;
-        }
-        case 1:
-        {
-            ts = TransitionJumpZoom::create(1, scene);
-            break;
-        }
-        case 2:
-        {
-            ts = TransitionProgressInOut::create(1, scene);
-            break;
-        }
-        case 3:
-        {
-            ts = TransitionZoomFlipAngular::create(1, scene);
-            break;
-        }
-        case 4:
-        {
-            ts = TransitionFadeDown::create(1, scene);
-            break;
-        }
-            
-        default:
-            break;
-    }
-    
-    // run
-    director->runWithScene(ts);
-
     return true;
 }
 

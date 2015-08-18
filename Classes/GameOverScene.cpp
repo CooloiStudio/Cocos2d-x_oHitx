@@ -7,6 +7,7 @@
 //
 
 #include "GameOverScene.h"
+#include "Cooloi_RandTransition.h"
 
 #include "json/rapidjson.h"
 #include "json/document.h"
@@ -113,44 +114,7 @@ bool GameOver::init()
 void GameOver::menuCloseCallback(Ref* pSender)
 {
     auto scene = HelloWorld::createScene();
-    
-    
-    TransitionScene *ts;
-    
-    switch (rand() % 5)
-    {
-        case 0:
-        {
-            ts = TransitionShrinkGrow::create(1, scene);
-            break;
-        }
-        case 1:
-        {
-            ts = TransitionJumpZoom::create(1, scene);
-            break;
-        }
-        case 2:
-        {
-            ts = TransitionProgressInOut::create(1, scene);
-            break;
-        }
-        case 3:
-        {
-            ts = TransitionZoomFlipAngular::create(1, scene);
-            break;
-        }
-        case 4:
-        {
-            ts = TransitionFadeDown::create(1, scene);
-            break;
-        }
-            
-            
-        default:
-            break;
-    }
-    
-    Director::getInstance()->replaceScene(ts);
+    Cooloi::RandTransition::RandTransitionFn(scene);
 }
 
 void GameOver::DataUpdate()

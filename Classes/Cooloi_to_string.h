@@ -10,9 +10,7 @@
 #ifndef MobileFoodOrderClient_custom_string_h
 #define MobileFoodOrderClient_custom_string_h
 
-#include <string>
 #include <iostream>
-
 #include <string>
 #include <sstream>
 
