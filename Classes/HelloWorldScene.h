@@ -32,6 +32,10 @@ public:
     void GameLogic(float dt);
     void update(float dt);
     
+#pragma mark - Lable Management
+    void LableInit();
+    void LabelUpdate();
+    
 #pragma mark - Touch
     
     virtual bool onTouchBegan(Touch *touch,
@@ -42,12 +46,28 @@ public:
     // implement the "static create()" method manually
     CREATE_FUNC(HelloWorld);
     
+#pragma mark - Score & Rank Update
+    void DataUpdateHit();
+    void DataUpdateShoot();
+    void DataUpdateMiss();
+    
 private:
     EventListenerTouchOneByOne *listener_touch_;
     
 protected:
     Vector<Sprite *> targets_;
     Vector<Sprite *> bullets_;
+    
+    int rank_;
+    int pwoer_;
+    int score_;
+    int hit_;
+    int exp_;
+    
+    Label *label_rank_;
+    Label *label_pwoer_;
+    Label *label_score_;
+    
 };//HelloWorld : public cocos2d::Layer
 
 #endif // __HELLOWORLD_SCENE_H__

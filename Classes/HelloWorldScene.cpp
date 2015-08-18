@@ -1,14 +1,23 @@
 #include "HelloWorldScene.h"
+#include <math.h>
+#include "json/rapidjson.h"
+#include "json/document.h"
+#include "json/writer.h"
+
+#include "GameOverScene.h"
 
 using namespace cocos2d::ui;
-
-USING_NS_CC;
 
 #pragma mark - Initialization
 
 HelloWorld::HelloWorld():
 targets_(NULL),
-bullets_(NULL)
+bullets_(NULL),
+rank_(1),
+pwoer_(10),
+score_(0),
+hit_(0),
+exp_(0)
 {}//HelloWorld::HelloWorld
 
 HelloWorld::~HelloWorld()
@@ -73,48 +82,6 @@ bool HelloWorld::init()
     this->addChild(layer,
                    0);
     
-#pragma mark -add close button
-//    /////////////////////////////
-//    // 2. add a menu item with "X" image, which is clicked to quit the program
-//    //    you may modify it.
-//    
-//    // add a "close" icon to exit the progress. it's an autorelease object
-//    auto close_item = MenuItemImage::create("CloseNormal.png",
-//                                            "CloseSelected.png",
-//                                            CC_CALLBACK_1(HelloWorld::MenuCloseCallback,
-//                                                          this));
-//    
-//    close_item->setPosition(
-//                            Vec2(origin.x + visible_size.width - close_item->getContentSize().width / 2,
-//                                 origin.y + close_item->getContentSize().height / 2));
-//    
-//    // create menu, it's an autorelease object
-//    auto menu = Menu::create(close_item,
-//                             NULL);
-//    menu->setPosition(Vec2::ZERO);
-//    this->addChild(menu,
-//                   1);
-    
-    //    /////////////////////////////
-    //    // 3. add your codes below...
-    //
-    //    // add a label shows "Hello World"
-    //    // create and initialize a label
-    //
-    //    auto label = LabelTTF::create("Hello World",
-    //                                  "Arial",
-    //                                  24);
-    //
-    //    // position the label on the center of the screen
-    //    label->setPosition(Vec2(origin.x + visible_size.width/2,
-    //                            origin.y + visible_size.height - label->getContentSize().height));
-    //
-    //
-    //    // add the label as a child to this layer
-    //    this->addChild(label,
-    //                   1);
-    //
-    
 #pragma mark -add player sprite
     // add "HelloWorld" splash screen"
     auto player1 = Sprite::create("xo0002.png");
@@ -134,24 +101,16 @@ bool HelloWorld::init()
                    1.0);
     this->schedule(schedule_selector(HelloWorld::update));
     
+    LableInit();
+    
+    addChild(label_rank_);
+    addChild(label_score_);
+    addChild(label_pwoer_);
+    
     return true;
 }// HelloWorld::init
 
 #pragma mark - Callbakc function
-
-void HelloWorld::MenuCloseCallback(Ref* pSender)
-{
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WP8) || (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-    MessageBox("You pressed the close button. Windows Store Apps do not implement a close button.","Alert");
-    return;
-#endif
-    
-    Director::getInstance()->end();
-    
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    exit(0);
-#endif
-}// HelloWorld::MenuCloseCallback
 
 #pragma mark - Sprite Management
 
@@ -172,11 +131,13 @@ void HelloWorld::AddTarget()
     target->setTag(1);
     targets_.pushBack(target);
     
-    auto min_duration = (int)2.0;
-    auto max_duration = (int)4.0;
+    auto min_duration = (int)2000 / (pow(1.2,rank_ - 1));
+    auto max_duration = (int)8000 / (pow(1.2,rank_ - 1));
     
     auto range_duration = max_duration - min_duration;
-    auto actural_duration = (rand() % range_duration) + min_duration;
+    auto actural_duration = (rand() % (int)range_duration) + min_duration;
+    
+    actural_duration = actural_duration / 1000.0;
     
     auto *action_move = MoveTo::create((float)actural_duration,
                                        Vec2(0 - target->getContentSize().width / 2,
@@ -196,6 +157,7 @@ void HelloWorld::SpriteMoveFinished(Node *sender)
     if (1 == sprite->getTag())
     {
         targets_.eraseObject(sprite);
+        DataUpdateMiss();
     }
     else if (2 == sprite->getTag())
     {
@@ -232,6 +194,7 @@ void HelloWorld::update(float dt)
                 targets_to_delete.pushBack(target);
                 bullets_to_delete.pushBack(bullet);
                 log("hit");
+                DataUpdateHit();
             }
         }
     }
@@ -252,6 +215,52 @@ void HelloWorld::update(float dt)
     bullets_to_delete.shrinkToFit();
 }
 
+#pragma mark - Lable Management
+
+void HelloWorld::LableInit()
+{
+    label_rank_ = Label::createWithSystemFont("",
+                                              "Arial",
+                                              40);
+    label_rank_->setTextColor(Color4B(0,0,0,255));
+    
+    label_score_ = Label::createWithSystemFont("",
+                                               "Arial",
+                                               40);
+    label_score_->setTextColor(Color4B(0,0,0,255));
+    
+    label_pwoer_ = Label::createWithSystemFont("",
+                                               "Arial",
+                                               32);
+    label_pwoer_->setTextColor(Color4B(0,0,0,255));
+    
+    LabelUpdate();
+}
+
+void HelloWorld::LabelUpdate()
+{
+    auto visible_size = Director::getInstance()->getVisibleSize();
+    auto origin = Director::getInstance()->getVisibleOrigin();
+    
+    label_rank_->setString(" x" + std::to_string(rank_) + " ");
+    label_rank_->setPosition(Vec2(origin.x + label_rank_->getContentSize().width / 2,
+                                  origin.y
+                                  + visible_size.height
+                                  - label_rank_->getContentSize().height / 2));
+    
+    label_score_->setString(" " + std::to_string(score_));
+    label_score_->setPosition(Vec2(origin.x
+                                   + label_rank_->getContentSize().width
+                                   + label_score_->getContentSize().width / 2,
+                                   origin.y
+                                   + visible_size.height
+                                   - label_score_->getContentSize().height / 2));
+    
+    label_pwoer_->setString(" " + std::to_string(pwoer_));
+    label_pwoer_->setPosition(Vec2(origin.x + label_pwoer_->getContentSize().width / 2,
+                                   origin.y + label_pwoer_->getContentSize().height / 2));
+}
+
 #pragma mark - Touch
 
 bool HelloWorld::onTouchBegan(cocos2d::Touch *touch,
@@ -263,6 +272,12 @@ bool HelloWorld::onTouchBegan(cocos2d::Touch *touch,
 void HelloWorld::onTouchEnded(cocos2d::Touch *touch,
                               cocos2d::Event *event)
 {
+    if (0 >= pwoer_)
+    {
+        return;
+    }
+    DataUpdateShoot();
+    
     //获取点击位置
     auto location_in_view = touch->getLocationInView();
     auto location = Director::sharedDirector()->convertToGL(location_in_view);
@@ -293,10 +308,53 @@ void HelloWorld::onTouchEnded(cocos2d::Touch *touch,
     auto velocity = 480 / 1;
     auto real_move_duration = length / velocity;
     
-    bullet->runAction(
-                      Sequence::create(MoveTo::create(real_move_duration,
+    bullet->runAction(Sequence::create(MoveTo::create(real_move_duration,
                                                       read_destination),
                                        CallFuncN::create(this,
                                                          callfuncN_selector(HelloWorld::SpriteMoveFinished)),
                                        NULL));
+}
+
+void HelloWorld::DataUpdateHit()
+{
+    score_ = score_ + rank_;
+    if (233 > rank_)
+    {
+        if(10 <= exp_)
+        {
+            exp_ = 0;
+            rank_++;
+        }
+        else
+            exp_++;
+    }
+    else
+        rank_ = 233;
+    pwoer_ = pwoer_ + (rank_ + 1) / 2;
+    LabelUpdate();
+}
+
+void HelloWorld::DataUpdateShoot()
+{
+    pwoer_--;
+    LabelUpdate();
+}
+
+void HelloWorld::DataUpdateMiss()
+{
+    if (0 < pwoer_)
+    {
+        pwoer_--;
+        LabelUpdate();
+    }
+    else
+    {
+        auto scene = GameOver::createScene();
+        
+        scene->set_score(score_);
+        scene->DataUpdate();
+        
+        auto director = Director::getInstance();
+        director->replaceScene(scene);
+    }
 }
