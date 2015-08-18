@@ -8,10 +8,15 @@
 
 #include "GameOverScene.h"
 
+#include "json/rapidjson.h"
+#include "json/document.h"
+#include "json/writer.h"
+#include "json/stringbuffer.h"
+
 #include "HelloWorldScene.h"
 
 GameOver::GameOver():
-score_(0)
+label_score_(nullptr)
 {
     
 }
@@ -106,10 +111,49 @@ bool GameOver::init()
 void GameOver::menuCloseCallback(Ref* pSender)
 {
     auto scene = HelloWorld::createScene();
-    Director::getInstance()->replaceScene(scene);
+    
+    
+    TransitionScene *ts;
+    
+    switch (rand() % 5)
+    {
+        case 0:
+            ts = TransitionShrinkGrow::create(1, scene);
+            break;
+        case 1:
+            ts = TransitionJumpZoom::create(1, scene);
+            break;
+        case 2:
+            ts = TransitionProgressInOut::create(1, scene);
+            break;
+        case 3:
+            ts = TransitionZoomFlipAngular::create(1, scene);
+            break;
+        case 4:
+            ts = TransitionFadeDown::create(1, scene);
+            break;
+            
+        default:
+            break;
+    }
+    
+    Director::getInstance()->replaceScene(ts);
 }
 
 void GameOver::DataUpdate()
 {
-    label_score_->setString("Score:" + std::to_string(score_));
+    auto path = FileUtils::getInstance()->getWritablePath() + "score.json";
+    auto temp = FileUtils::getInstance()->getStringFromFile(path);
+    rapidjson::Document d;
+    d.Parse<0>(temp.c_str());
+    
+    auto score = d["score"].GetInt();
+    if (d["new"].GetBool())
+    {
+        label_score_->setString("New Record:" + std::to_string(score));
+    }
+    else
+    {
+        label_score_->setString("Record:" + std::to_string(score));
+    }
 }

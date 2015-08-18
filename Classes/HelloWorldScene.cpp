@@ -1,10 +1,13 @@
 #include "HelloWorldScene.h"
 #include <math.h>
+
 #include "json/rapidjson.h"
 #include "json/document.h"
 #include "json/writer.h"
+#include "json/stringbuffer.h"
 
 #include "GameOverScene.h"
+#include "iostream"
 
 using namespace cocos2d::ui;
 
@@ -248,14 +251,15 @@ void HelloWorld::LabelUpdate()
                                   + visible_size.height
                                   - label_rank_->getContentSize().height / 2));
     
-    label_score_->setString("\t" + std::to_string(score_));
+    label_score_->setString(" " + std::to_string(score_));
     label_score_->setPosition(Vec2(origin.x
-                                   + label_rank_->getContentSize().width
                                    + label_score_->getContentSize().width / 2,
                                    origin.y
                                    + visible_size.height
+                                   - label_rank_->getContentSize().height
                                    - label_score_->getContentSize().height / 2));
     
+    if(0 > pwoer_) pwoer_ = 0;
     label_pwoer_->setString(" " + std::to_string(pwoer_));
     label_pwoer_->setPosition(Vec2(origin.x + label_pwoer_->getContentSize().width / 2,
                                    origin.y + label_pwoer_->getContentSize().height / 2));
@@ -344,17 +348,74 @@ void HelloWorld::DataUpdateMiss()
 {
     if (0 < pwoer_)
     {
-        pwoer_--;
+        pwoer_ = pwoer_ - (rank_ + 2 / 3);
         LabelUpdate();
     }
     else
     {
+        auto path = FileUtils::getInstance()->getWritablePath() + "score.json";
+        rapidjson::Document d;
+        if (!FileUtils::getInstance()->isFileExist(path))
+        {
+            d.SetObject();
+            d.AddMember("score", score_, d.GetAllocator());
+            d.AddMember("new", true, d.GetAllocator());
+        }
+        else
+        {
+            auto temp = FileUtils::getInstance()->getStringFromFile(path);
+            d.Parse<0>(temp.c_str());
+            if(d["score"].GetInt() < score_)
+            {
+                d["score"] = score_;
+                d["new"] = true;
+            }
+            else
+            {
+                d["new"] = false;
+            }
+        }
+        rapidjson::StringBuffer buffer;
+        rapidjson::Writer<rapidjson::StringBuffer> write(buffer);
+        d.Accept(write);
+        log("new score is %s",buffer.GetString());
+        FILE* file = fopen(path.c_str(), "wb");
+        if (file)
+        {
+            fputs(buffer.GetString(), file);
+            fclose(file);
+        }
+        
         auto scene = GameOver::createScene();
         
-        scene->set_score(score_);
         scene->DataUpdate();
         
         auto director = Director::getInstance();
-        director->replaceScene(scene);
+        TransitionScene *ts;
+        
+        switch (rand() % 5)
+        {
+            case 0:
+                ts = TransitionShrinkGrow::create(1, scene);
+                break;
+            case 1:
+                ts = TransitionJumpZoom::create(1, scene);
+                break;
+            case 2:
+                ts = TransitionProgressInOut::create(1, scene);
+                break;
+            case 3:
+                ts = TransitionZoomFlipAngular::create(1, scene);
+                break;
+            case 4:
+                ts = TransitionFadeDown::create(1, scene);
+                break;
+                
+            default:
+                break;
+        }
+        
+        director->replaceScene(ts);
+        
     }
 }

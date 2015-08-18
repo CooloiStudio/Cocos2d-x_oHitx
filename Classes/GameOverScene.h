@@ -34,10 +34,8 @@ public:
     void DataUpdate();
     
 public:
-    void set_score(int score) { score_ = score; }
     
 private:
-    int score_;
     Label *label_score_;
     
 };
