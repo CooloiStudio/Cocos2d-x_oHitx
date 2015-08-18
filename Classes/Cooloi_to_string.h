@@ -23,12 +23,12 @@ namespace std
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
         
         std::ostringstream os;
-        os << value;
+        os << n;
         return os.str();
         
 #else
         
-        return std::to_string(value);
+        return std::to_string(n);
         
 #endif
     }
