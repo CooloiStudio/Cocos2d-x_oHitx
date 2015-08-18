@@ -188,16 +188,20 @@ void HelloWorld::update(float dt)
     
     for (auto bullet : bullets_)
     {
-        auto bullet_rect = Rect(bullet->getPosition().x - bullet->getContentSize().width / 2,
-                                bullet->getPosition().y - bullet->getContentSize().height / 2,
-                                bullet->getContentSize().width,
-                                bullet->getContentSize().height);
+        auto bullet_rect = Rect(bullet->getPosition().x
+                                - bullet->getContentSize().width * bullet->getScale() / 2,
+                                bullet->getPosition().y
+                                - bullet->getContentSize().height * bullet->getScale() / 2,
+                                bullet->getContentSize().width * bullet->getScale(),
+                                bullet->getContentSize().height * bullet->getScale());
         for (auto target : targets_)
         {
-            auto target_rect = Rect(target->getPosition().x - target->getContentSize().width / 2,
-                                    target->getPosition().y - target->getContentSize().height / 2,
-                                    target->getContentSize().width,
-                                    target->getContentSize().height);
+            auto target_rect = Rect(target->getPosition().x
+                                    - target->getContentSize().width * target->getScale() / 2,
+                                    target->getPosition().y
+                                    - target->getContentSize().height * target->getScale() / 2,
+                                    target->getContentSize().width * target->getScale(),
+                                    target->getContentSize().height * target->getScale());
             
             if (bullet_rect.intersectsRect(target_rect))
             {
