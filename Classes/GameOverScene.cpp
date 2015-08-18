@@ -15,6 +15,8 @@
 
 #include "HelloWorldScene.h"
 
+#include "Cooloi_to_string.h"
+
 GameOver::GameOver():
 label_score_(nullptr)
 {

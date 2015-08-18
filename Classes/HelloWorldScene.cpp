@@ -9,6 +9,8 @@
 #include "GameOverScene.h"
 #include "iostream"
 
+#include "Cooloi_to_string.h"
+
 using namespace cocos2d::ui;
 
 #pragma mark - Initialization
