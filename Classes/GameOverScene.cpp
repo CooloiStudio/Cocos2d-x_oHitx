@@ -120,20 +120,31 @@ void GameOver::menuCloseCallback(Ref* pSender)
     switch (rand() % 5)
     {
         case 0:
+        {
             ts = TransitionShrinkGrow::create(1, scene);
             break;
+        }
         case 1:
+        {
             ts = TransitionJumpZoom::create(1, scene);
             break;
+        }
         case 2:
+        {
             ts = TransitionProgressInOut::create(1, scene);
             break;
+        }
         case 3:
+        {
             ts = TransitionZoomFlipAngular::create(1, scene);
             break;
+        }
         case 4:
+        {
             ts = TransitionFadeDown::create(1, scene);
             break;
+        }
+            
             
         default:
             break;
