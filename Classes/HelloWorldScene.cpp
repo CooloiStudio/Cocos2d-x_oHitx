@@ -248,7 +248,7 @@ void HelloWorld::LabelUpdate()
                                   + visible_size.height
                                   - label_rank_->getContentSize().height / 2));
     
-    label_score_->setString(" " + std::to_string(score_));
+    label_score_->setString("\t" + std::to_string(score_));
     label_score_->setPosition(Vec2(origin.x
                                    + label_rank_->getContentSize().width
                                    + label_score_->getContentSize().width / 2,
