@@ -1,6 +1,7 @@
 #include "AppDelegate.h"
 #include "HelloWorldScene.h"
 #include "Cooloi_Game.h"
+#include "AndroidLoadScene.h"
 
 USING_NS_CC;
 
@@ -41,11 +42,15 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     // set FPS. the default value is 1.0/60 if you don't call this
     director->setAnimationInterval(1.0 / 60);
+    
+    
+    auto scene_a = AndroidLoad::create();
+    Cooloi::Game::RandTransitionFn(scene_a);
 
     // create a scene. it's an autorelease object
-    auto scene = HelloWorld::createScene();
-    
-    Cooloi::Game::RandTransitionFn(scene);
+//    auto scene = HelloWorld::createScene();
+//    
+//    Cooloi::Game::RandTransitionFn(scene);
     
     return true;
 }

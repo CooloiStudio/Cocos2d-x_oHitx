@@ -17,7 +17,9 @@
 #include "HelloWorldScene.h"
 
 GameOver::GameOver():
-label_score_(nullptr)
+score_(0),
+label_score_(nullptr),
+label_record_(nullptr)
 {
     
 }
@@ -60,30 +62,30 @@ bool GameOver::init()
     this->addChild(layer,
                    0);
     
-    auto *label_gameover = Label::createWithSystemFont("Game Over",
-                                                       "Arial",
-                                                       64);
-    label_gameover->setTextColor(Color4B(0,
-                                         0,
-                                         0,
-                                         255));
-    
-    label_gameover->setPosition(Vec2(origin.x + visible_size.width / 2 ,
-                                     origin.y + visible_size.height / 2));
-    addChild(label_gameover);
-    
     label_score_ = Label::createWithSystemFont("",
                                                "Arial",
-                                               100);
+                                               64);
     label_score_->setTextColor(Color4B(0,
-                                      0,
-                                      0,
-                                      255));
+                                       0,
+                                       0,
+                                       255));
+    
     label_score_->setPosition(Vec2(origin.x + visible_size.width / 2 ,
-                                  origin.y
-                                  + visible_size.height / 2
-                                  + label_gameover->getContentSize().height * 2));
+                                   origin.y + visible_size.height / 2));
     addChild(label_score_);
+    
+    label_record_ = Label::createWithSystemFont("This Game:",
+                                                "Arial",
+                                                70);
+    label_record_->setTextColor(Color4B(0,
+                                        0,
+                                        0,
+                                        255));
+    label_record_->setPosition(Vec2(origin.x + visible_size.width / 2 ,
+                                    origin.y
+                                    + visible_size.height / 2
+                                    + label_record_->getContentSize().height * 2));
+    addChild(label_record_);
     
     auto * label_close = Label::createWithSystemFont("Repaly",
                                                      "Arial",
@@ -97,7 +99,7 @@ bool GameOver::init()
     closeItem->setPosition(Vec2(origin.x + visible_size.width / 2 ,
                                 origin.y
                                 + visible_size.height / 2
-                                - label_gameover->getContentSize().height * 2));
+                                - label_record_->getContentSize().height * 2));
     
     // create menu, it's an autorelease object
     auto menu = Menu::create(closeItem, NULL);
@@ -125,10 +127,12 @@ void GameOver::DataUpdate()
     auto score = d["score"].GetInt();
     if (d["new"].GetBool())
     {
-        label_score_->setString("New Record:" + std::to_string(score));
+        label_record_->setString("New Record:" + std::to_string(score));
     }
     else
     {
-        label_score_->setString("Record:" + std::to_string(score));
+        label_record_->setString("Record:" + std::to_string(score));
     }
+    
+    label_score_->setString("This Game:" + std::to_string(score_));
 }

@@ -398,7 +398,7 @@ void HelloWorld::DataUpdateMiss()
         }
         
         auto scene = GameOver::createScene();
-        
+        scene->set_score_(score_);
         scene->DataUpdate();
         
         Cooloi::Game::RandTransitionFn(scene);

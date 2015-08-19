@@ -53,7 +53,7 @@ namespace Cooloi
                 ts = TransitionShrinkGrow::create(1, scene);
                 break;
             case 1:
-                ts = TransitionJumpZoom::create(1, scene);
+                ts = TransitionJumpZoom::create(2, scene);
                 break;
             case 2:
                 ts = TransitionProgressInOut::create(1, scene);
