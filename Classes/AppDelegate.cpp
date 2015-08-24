@@ -44,14 +44,18 @@ bool AppDelegate::applicationDidFinishLaunching() {
     director->setAnimationInterval(1.0 / 60);
     
     
-//    auto scene = AndroidLoad::create();
-//    auto ts = TransitionShrinkGrow::create(1, scene);
+    auto scene = AndroidLoad::create();
+//    TransitionScene *ts;
+//    ts = TransitionShrinkGrow::create(1, scene);
 //    director->replaceScene(ts);
 
     // create a scene. it's an autorelease object
-    auto scene = HelloWorld::createScene();
-    auto ts = TransitionShrinkGrow::create(1, scene);
-    director->replaceScene(ts);
+//    auto scene = HelloWorld::createScene();
+//    TransitionScene *ts = TransitionShrinkGrow::create(1, scene);
+//    Director::getInstance()->replaceScene(ts);
+    Director::getInstance()->replaceScene(scene);
+    
+    scene->SetTime(3.0);
     
     return true;
 }

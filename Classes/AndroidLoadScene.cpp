@@ -67,10 +67,7 @@ bool AndroidLoad::init()
                             - cocos->getContentSize().width * .6,
                             origin.y
                             + cocos->getContentSize().height * .6));
-    addChild(cocos);
-    
-    SetTime(3.0);
-    
+    addChild(cocos);    
     return true;
 }
 
@@ -82,6 +79,6 @@ void AndroidLoad::SetTime(float t)
 void AndroidLoad::ChangeScene(float t)
 {
     auto scene = HelloWorld::createScene();
-    auto ts = TransitionShrinkGrow::create(1, scene);
-    Director::getInstance()->replaceScene(ts);
+//    TransitionScene *ts = TransitionShrinkGrow::create(1, scene);
+    Director::getInstance()->replaceScene(scene);
 }

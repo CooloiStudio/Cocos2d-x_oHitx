@@ -10,6 +10,8 @@
 #include "GameOverScene.h"
 #include "iostream"
 
+#include "SimpleAudioEngine.h"
+
 using namespace cocos2d::ui;
 
 #pragma mark - Initialization
@@ -110,6 +112,12 @@ bool HelloWorld::init()
     addChild(label_rank_);
     addChild(label_score_);
     addChild(label_pwoer_);
+    
+    
+    auto audio = CocosDenshion::SimpleAudioEngine::getInstance();
+    audio->preloadEffect("laser4.mp3");
+    audio->preloadEffect("poka02.mp3");
+    audio->preloadEffect("poyo.mp3");
     
     return true;
 }// HelloWorld::init
@@ -334,6 +342,8 @@ void HelloWorld::onTouchEnded(cocos2d::Touch *touch,
 
 void HelloWorld::DataUpdateHit()
 {
+    auto audio = CocosDenshion::SimpleAudioEngine::getInstance();
+    audio->playEffect("poka02.mp3");
     score_ = score_ + rank_;
     if (233 > rank_)
     {
@@ -353,12 +363,16 @@ void HelloWorld::DataUpdateHit()
 
 void HelloWorld::DataUpdateShoot()
 {
+    auto audio = CocosDenshion::SimpleAudioEngine::getInstance();
+    audio->playEffect("laser4.mp3");
     pwoer_--;
     LabelUpdate();
 }
 
 void HelloWorld::DataUpdateMiss()
 {
+    auto audio = CocosDenshion::SimpleAudioEngine::getInstance();
+    audio->playEffect("poyo.mp3");
     if (0 < pwoer_)
     {
         pwoer_ = pwoer_ - (rank_ + 2 / 3);
@@ -402,7 +416,7 @@ void HelloWorld::DataUpdateMiss()
         auto scene = GameOver::createScene();
         scene->set_score_(score_);
         scene->DataUpdate();
-        auto ts = TransitionShrinkGrow::create(1, scene);
-        Director::getInstance()->replaceScene(ts);
+        //    TransitionScene *ts = TransitionShrinkGrow::create(1, scene);
+        Director::getInstance()->replaceScene(scene);
     }
 }

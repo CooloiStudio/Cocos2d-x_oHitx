@@ -114,8 +114,8 @@ bool GameOver::init()
 void GameOver::menuCloseCallback(Ref* pSender)
 {
     auto scene = HelloWorld::createScene();
-    auto ts = TransitionShrinkGrow::create(1, scene);
-    Director::getInstance()->replaceScene(ts);
+    //    TransitionScene *ts = TransitionShrinkGrow::create(1, scene);
+    Director::getInstance()->replaceScene(scene);
 }
 
 void GameOver::DataUpdate()
