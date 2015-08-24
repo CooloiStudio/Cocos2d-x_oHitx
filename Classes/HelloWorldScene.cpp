@@ -170,6 +170,7 @@ void HelloWorld::AddTarget()
 void HelloWorld::SpriteMoveFinished(Node *sender)
 {
     auto *sprite = (Sprite *)sender;
+    log("%d", sprite->getTag());
     this->removeChild(sprite,
                       true);
     if (1 == sprite->getTag())
@@ -318,6 +319,7 @@ void HelloWorld::onTouchEnded(cocos2d::Touch *touch,
     if (0 >= off_x) return;
     Cooloi::Game::SetScale(bullet);
     this->addChild(bullet);
+    bullet->setTag(2);
     bullets_.pushBack(bullet);
     
     auto real_x = visible_size.width + (bullet->getContentSize().width / 2);
