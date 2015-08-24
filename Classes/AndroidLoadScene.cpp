@@ -67,7 +67,19 @@ bool AndroidLoad::init()
                             - cocos->getContentSize().width * .6,
                             origin.y
                             + cocos->getContentSize().height * .6));
-    addChild(cocos);    
+    addChild(cocos);
+    
+    auto komori = Sprite::create("taira-komori.jpn.org.png");
+    komori->setPosition(Vec2(origin.x
+                             + visible_size.width
+                             - cocos->getContentSize().width * 1.4,
+                             origin.y
+                             + komori->getContentSize().height * .6
+                             + cocos->getContentSize().height * .1
+                             ));
+    addChild(komori);
+    
+    
     return true;
 }
 
