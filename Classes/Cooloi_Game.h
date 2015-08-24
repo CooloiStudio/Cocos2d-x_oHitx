@@ -19,7 +19,7 @@ namespace Cooloi
     {
     public:
         static void SetScale(Node *node);
-        static void RandTransitionFn(Scene* scene);
+//        static TransitionScene* RandTransition(Scene* scene);
     };
 }
 

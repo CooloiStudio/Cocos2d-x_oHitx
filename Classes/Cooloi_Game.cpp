@@ -36,41 +36,41 @@ namespace Cooloi
         node->setScale(Director::getInstance()->getVisibleSize().height / 1080);
     }
     
-    void Game::RandTransitionFn(Scene* scene)
-    {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WP8) || (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-        
-        auto ts = TransitionShrinkGrow::create(1, scene);
-        Director::getInstance()->replaceScene(ts);
-        
-#else
-        
-        TransitionScene *ts;
-        
-        switch (rand() % 5)
-        {
-            case 0:
-                ts = TransitionShrinkGrow::create(1, scene);
-                break;
-            case 1:
-                ts = TransitionJumpZoom::create(2, scene);
-                break;
-            case 2:
-                ts = TransitionProgressInOut::create(1, scene);
-                break;
-            case 3:
-                ts = TransitionZoomFlipAngular::create(1, scene);
-                break;
-            case 4:
-                ts = TransitionFadeDown::create(1, scene);
-                break;
-            default:
-                break;
-        }
-        
-        Director::getInstance()->replaceScene(ts);
-        
-#endif
-    }
+//    TransitionScene* Game::RandTransition(Scene* scene)
+//    {
+//#if (CC_TARGET_PLATFORM == CC_PLATFORM_WP8) || (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
+//        
+//        auto ts = TransitionShrinkGrow::create(1, scene);
+//        Director::getInstance()->replaceScene(ts);
+//        
+//#else
+//        
+//        TransitionScene *ts;
+//        
+//        switch (0)
+//        {
+//            case 0:
+//                ts = TransitionShrinkGrow::create(1, scene);
+//                break;
+//            case 1:
+//                ts = TransitionJumpZoom::create(2, scene);
+//                break;
+//            case 2:
+//                ts = TransitionProgressInOut::create(1, scene);
+//                break;
+//            case 3:
+//                ts = TransitionZoomFlipAngular::create(1, scene);
+//                break;
+//            case 4:
+//                ts = TransitionFadeDown::create(1, scene);
+//                break;
+//            default:
+//                break;
+//        }
+//        
+//        return ts;
+//        
+//#endif
+//    }
 
 }

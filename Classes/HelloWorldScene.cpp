@@ -281,12 +281,14 @@ void HelloWorld::LabelUpdate()
 bool HelloWorld::onTouchBegan(cocos2d::Touch *touch,
                               cocos2d::Event *event)
 {
+    log("onTouchBegan");
     return true;
 }
 
 void HelloWorld::onTouchEnded(cocos2d::Touch *touch,
                               cocos2d::Event *event)
 {
+    log("onTouchEnded");
     if (0 >= pwoer_)
     {
         return;
@@ -400,7 +402,7 @@ void HelloWorld::DataUpdateMiss()
         auto scene = GameOver::createScene();
         scene->set_score_(score_);
         scene->DataUpdate();
-        
-        Cooloi::Game::RandTransitionFn(scene);
+        auto ts = TransitionShrinkGrow::create(1, scene);
+        Director::getInstance()->replaceScene(ts);
     }
 }

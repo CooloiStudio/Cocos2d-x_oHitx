@@ -44,13 +44,14 @@ bool AppDelegate::applicationDidFinishLaunching() {
     director->setAnimationInterval(1.0 / 60);
     
     
-    auto scene_a = AndroidLoad::create();
-    Cooloi::Game::RandTransitionFn(scene_a);
+//    auto scene = AndroidLoad::create();
+//    auto ts = TransitionShrinkGrow::create(1, scene);
+//    director->replaceScene(ts);
 
     // create a scene. it's an autorelease object
-//    auto scene = HelloWorld::createScene();
-//    
-//    Cooloi::Game::RandTransitionFn(scene);
+    auto scene = HelloWorld::createScene();
+    auto ts = TransitionShrinkGrow::create(1, scene);
+    director->replaceScene(ts);
     
     return true;
 }

@@ -69,7 +69,7 @@ bool AndroidLoad::init()
                             + cocos->getContentSize().height * .6));
     addChild(cocos);
     
-    SetTime(2.0);
+    SetTime(3.0);
     
     return true;
 }
@@ -82,5 +82,6 @@ void AndroidLoad::SetTime(float t)
 void AndroidLoad::ChangeScene(float t)
 {
     auto scene = HelloWorld::createScene();
-    Cooloi::Game::RandTransitionFn(scene);
+    auto ts = TransitionShrinkGrow::create(1, scene);
+    Director::getInstance()->replaceScene(ts);
 }

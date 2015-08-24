@@ -114,7 +114,8 @@ bool GameOver::init()
 void GameOver::menuCloseCallback(Ref* pSender)
 {
     auto scene = HelloWorld::createScene();
-    Cooloi::Game::RandTransitionFn(scene);
+    auto ts = TransitionShrinkGrow::create(1, scene);
+    Director::getInstance()->replaceScene(ts);
 }
 
 void GameOver::DataUpdate()
